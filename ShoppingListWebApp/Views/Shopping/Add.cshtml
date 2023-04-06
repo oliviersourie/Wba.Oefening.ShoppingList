@@ -1,0 +1,29 @@
+﻿@model ShopItemsViewModel
+
+@{
+    Layout = "_Master";
+}
+
+<form asp-action="Add">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <label asp-for="ShopItem.Name"></label>
+    <input type="text" asp-for="ShopItem.Name" />
+    <span asp-validation-for="ShopItem.Name" class="text-danger"></span>
+    <br />
+
+    <label asp-for="ShopItem.Quantity"></label>
+    <select asp-for="ShopItem.Quantity" asp-items="@Model.ShopItem.QuantityList">
+        <option value="0">-- Choose quantity --</option>
+    </select>
+    <span asp-validation-for="ShopItem.Quantity" class="text-danger"></span>
+
+    <br />
+    <input type="submit" value="Add to list" />
+</form>
+<ul>
+    @foreach (ShopItemViewModel item in Model.ShopItems)
+    {
+        <li>@item.Name (@(item.Quantity)x)</li>
+    }
+</ul>

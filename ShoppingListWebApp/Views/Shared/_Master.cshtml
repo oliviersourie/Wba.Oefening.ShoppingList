@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping List</title>
+    <link rel="stylesheet" type="text/css" href="~/assets/css/reset.css" />
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets/css/screen.css" />
+ 
+</head>
+<body>
+    <div id="container">
+        <header>
+            <h1><span class="material-icons">shopping_cart</span> Shopping List</h1>
+        </header>
+        <main>
+            @RenderBody()
+        </main>
+        <footer>
+            <hr />
+            <p>&copy; @DateTime.Now.Year Howest, University College of West-Flanders</p>
+        </footer>
+    </div>
+</body>
+</html>
