@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ClassLib.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoppingListWebApp.ViewModels;
 
@@ -6,11 +7,11 @@ namespace ShoppingListWebApp.Controllers;
 
 public class ShoppingController : Controller
 {
-    private ICollection<ShopItem> _shoppingItems;
+    private readonly ShoppingListContext _db;
 
-    public ShoppingController()
+    public ShoppingController(ShoppingListContext shoppingListContext)
     {
-        _shoppingItems = new List<ShopItem>();
+        _db = shoppingListContext;
     }
 
     [HttpGet]
@@ -28,7 +29,11 @@ public class ShoppingController : Controller
                                              Value = q.ToString()
                                          })
             },
-            ShopItems = new List<ShopItemViewModel>() //GetShoppingItems().ToList()
+            ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
+            {
+                Name = si.Name,
+                Quantity = si.Quantity
+            })
         };
         return View(shopItemsViewModel);
     }
@@ -41,13 +46,12 @@ public class ShoppingController : Controller
 
         if (ModelState.IsValid)
         {
-            //_shoppingItems = GetShoppingItems().ToList();
-            _shoppingItems.Add(new ShopItem
+            _db.ShopItems.Add(new ShopItem
             {
                 Name = newShopItemsViewModel.ShopItem.Name,
                 Quantity = newShopItemsViewModel.ShopItem.Quantity
             });
-            //StoreShopItem(shoppingItems);
+            _db.SaveChanges();
 
             return RedirectToAction(controllerName: "Shopping", 
                                     actionName:  nameof(Add));
@@ -65,7 +69,11 @@ public class ShoppingController : Controller
                                              Value = q.ToString()
                                          })
             },
-            ShopItems = new List<ShopItemViewModel>() //GetShoppingItems().ToList()
+            ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
+            {
+                Name = si.Name,
+                Quantity = si.Quantity
+            })
         };
         return View(shopItemsViewModel);
     }
