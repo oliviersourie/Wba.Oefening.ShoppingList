@@ -31,6 +31,7 @@ public class ShoppingController : Controller
             },
             ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
             {
+                Id = si.Id,
                 Name = si.Name,
                 Quantity = si.Quantity
             })
@@ -71,10 +72,32 @@ public class ShoppingController : Controller
             },
             ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
             {
+                Id = si.Id,
                 Name = si.Name,
                 Quantity = si.Quantity
             })
         };
         return View(shopItemsViewModel);
+    }
+
+    public IActionResult Delete(long id)
+    {
+        ShopItem deleteShopItem = _db.ShopItems
+                                     .SingleOrDefault(si => si.Id == id);
+        if(deleteShopItem is ShopItem)
+        {
+            _db.ShopItems.Remove(deleteShopItem);
+        }      
+
+        try
+        {
+            _db.SaveChanges();
+        }
+        catch (DbUpdateException e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, $"Something went wrong: {e.Message}");
+        }
+
+        return RedirectToAction(nameof(ShoppingController.Add));
     }
 }

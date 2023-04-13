@@ -24,6 +24,6 @@
 <ul>
     @foreach (ShopItemViewModel item in Model.ShopItems)
     {
-        <li>@item.Name (@(item.Quantity)x)</li>
+        <li>@item.Name (@(item.Quantity)x) <a asp-action="Delete" asp-route-Id="@item.Id" class="material-icons">delete</a></li>
     }
 </ul>

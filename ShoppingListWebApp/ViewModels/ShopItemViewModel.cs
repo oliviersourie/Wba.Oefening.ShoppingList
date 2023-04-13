@@ -5,6 +5,8 @@ namespace ShoppingListWebApp.ViewModels
 {
     public class ShopItemViewModel
     {
+        public long Id { get; init; }
+
         [Display(Name = "Item")]
         [Required(ErrorMessage = "Please enter a product name")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Product name should be between {2} and {1} characters long")]
