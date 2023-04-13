@@ -1,7 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ShoppingListContext>(options =>
+{
+    options.UseSqlServer(configuration.GetConnectionString("ShoppingDb"));
+});
 
 var app = builder.Build();
 
