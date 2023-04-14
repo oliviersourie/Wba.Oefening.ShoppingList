@@ -21,9 +21,4 @@
     <br />
     <input type="submit" value="Update item" />
 </form>
-<ul>
-    @foreach (ShopItemViewModel item in Model.ShopItems)
-    {
-        <li>@item.Name (@(item.Quantity)x) <a asp-action="Edit" asp-route-Id="@item.Id" class="material-icons">edit</a> <a asp-action="Delete" asp-route-Id="@item.Id" class="material-icons">delete</a></li>
-    }
-</ul>
+<partial name="ShopItemsListPartial" model="Model.ShopItems" />
