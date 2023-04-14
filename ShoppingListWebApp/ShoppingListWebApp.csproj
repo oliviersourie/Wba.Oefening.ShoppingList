@@ -11,8 +11,8 @@
 
   <ItemGroup>
     <Using Include="ClassLib.Entities" />
-    <Using Include="Microsoft.EntityFrameworkCore;"/>
-    <Using Include="ShoppingListWebApp.Data"/>
+    <Using Include="Microsoft.EntityFrameworkCore;" />
+    <Using Include="ShoppingListWebApp.Data" />
   </ItemGroup>
   
   <ItemGroup>
@@ -26,6 +26,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Update="Views\Shopping\Edit.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

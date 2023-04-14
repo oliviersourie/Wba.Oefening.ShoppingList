@@ -80,6 +80,75 @@ public class ShoppingController : Controller
         return View(shopItemsViewModel);
     }
 
+    [HttpGet]
+    public IActionResult Edit(long id)
+    {
+        ShopItem shopItemToEdit = _db.ShopItems
+                                     .SingleOrDefault(si => si.Id.Equals(id));
+
+        ShopItemsViewModel shopItemsViewModel = new ShopItemsViewModel
+        {
+            ShopItem = new ShopItemViewModel()
+            {
+                Name = shopItemToEdit.Name,
+                QuantityList = Enumerable.Range(1, 5)
+                                         .ToList()
+                                         .Select(q => new SelectListItem()
+                                         {
+                                             Text = q.ToString(),
+                                             Value = q.ToString(),
+                                         })
+            },
+            ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
+            {
+                Id = si.Id,
+                Name = si.Name,
+                Quantity = si.Quantity
+            })
+        };
+        return View(shopItemsViewModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit([FromRoute] long id, ShopItemsViewModel updatedShopItemsViewModel)
+    {
+        if (ModelState.IsValid)
+        {
+            ShopItem shopItemToEdit = _db.ShopItems
+                             .SingleOrDefault(si => si.Id.Equals(id));
+
+            shopItemToEdit.Name = updatedShopItemsViewModel.ShopItem.Name;
+            shopItemToEdit.Quantity = updatedShopItemsViewModel.ShopItem.Quantity;
+            _db.SaveChanges();
+
+            return RedirectToAction(controllerName: "Shopping",
+                                    actionName: nameof(Add));
+        }
+
+        ShopItemsViewModel shopItemsViewModel = new ShopItemsViewModel
+        {
+            ShopItem = new ShopItemViewModel()
+            {
+                Name = updatedShopItemsViewModel.ShopItem.Name,
+                QuantityList = Enumerable.Range(1, 5)
+                                         .ToList()
+                                         .Select(q => new SelectListItem()
+                                         {
+                                             Text = q.ToString(),
+                                             Value = q.ToString()
+                                         })
+            },
+            ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
+            {
+                Id = si.Id,
+                Name = si.Name,
+                Quantity = si.Quantity
+            })
+        };
+        return View(shopItemsViewModel);
+    }
+
     public IActionResult Delete(long id)
     {
         ShopItem deleteShopItem = _db.ShopItems
