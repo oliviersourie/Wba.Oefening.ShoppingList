@@ -3,6 +3,7 @@
     public class ShoppingListContext: DbContext
     {
         public DbSet<ShopItem> ShopItems { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public ShoppingListContext(DbContextOptions<ShoppingListContext> options) : base(options)
         {
@@ -14,6 +15,12 @@
                         .Property(e => e.Name)
                         .IsRequired()
                         .HasMaxLength(20);
+
+            modelBuilder.Entity<ShopItem>()
+                        .Property(e => e.UnitPrice)
+                        .IsRequired()
+                        .HasColumnType("decimal")
+                        .HasPrecision(2);
 
             DataSeeder.Seed(modelBuilder);
 

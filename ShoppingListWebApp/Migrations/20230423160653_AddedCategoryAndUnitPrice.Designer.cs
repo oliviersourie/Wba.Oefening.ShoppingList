@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoppingListWebApp.Data;
 
@@ -10,9 +11,10 @@ using ShoppingListWebApp.Data;
 namespace ShoppingListWebApp.Migrations
 {
     [DbContext(typeof(ShoppingListContext))]
-    partial class ShoppingListContextModelSnapshot : ModelSnapshot
+    [Migration("20230423160653_AddedCategoryAndUnitPrice")]
+    partial class AddedCategoryAndUnitPrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,13 +37,6 @@ namespace ShoppingListWebApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Food"
-                        });
                 });
 
             modelBuilder.Entity("ClassLib.Entities.ShopItem", b =>
@@ -72,16 +67,6 @@ namespace ShoppingListWebApp.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("ShopItems");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CategoryId = 1,
-                            Name = "Tomaat",
-                            Quantity = 4,
-                            UnitPrice = 0m
-                        });
                 });
 
             modelBuilder.Entity("ClassLib.Entities.ShopItem", b =>

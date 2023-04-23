@@ -5,11 +5,17 @@
         public static void Seed(ModelBuilder modelBuilder)
         {
             //seeding data here
-            IEnumerable<ShopItem> shopItems = new List<ShopItem>()
+            IEnumerable<Category> categories = new List<Category>()
             {
-                new ShopItem { Id = 1L, Name = "Tomaat", Quantity = 4},
+                new Category { Id = 1, Description = "Food"}
             };
 
+            IEnumerable<ShopItem> shopItems = new List<ShopItem>()
+            {
+                new ShopItem { Id = 1L, Name = "Tomaat", Quantity = 4, CategoryId = 1}
+            };
+
+            modelBuilder.Entity<Category>().HasData(categories);
             modelBuilder.Entity<ShopItem>().HasData(shopItems);
         }
     }
