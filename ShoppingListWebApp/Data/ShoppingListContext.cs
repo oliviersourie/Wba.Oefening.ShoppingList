@@ -20,7 +20,7 @@
                         .Property(e => e.UnitPrice)
                         .IsRequired()
                         .HasColumnType("decimal")
-                        .HasPrecision(2);
+                        .HasPrecision(5, 2);
 
             DataSeeder.Seed(modelBuilder);
 

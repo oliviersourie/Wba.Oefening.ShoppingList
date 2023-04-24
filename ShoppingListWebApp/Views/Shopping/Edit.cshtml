@@ -17,6 +17,18 @@
         <option value="0">-- Choose quantity --</option>
     </select>
     <span asp-validation-for="ShopItem.Quantity" class="text-danger"></span>
+    <br />
+
+    <label asp-for="ShopItem.UnitPrice"></label>
+    <input type="text" asp-for="ShopItem.UnitPrice" />
+    <span asp-validation-for="ShopItem.UnitPrice" class="text-danger"></span>
+    <br />
+
+    <label asp-for="ShopItem.SelectedCategoryId"></label>
+    <select asp-for="ShopItem.SelectedCategoryId" asp-items="@Model.ShopItem.CategoryList">
+        <option value="0">-- Choose category --</option>
+    </select>
+    <span asp-validation-for="ShopItem.SelectedCategoryId" class="text-danger"></span>
 
     <br />
     <input type="submit" value="Update item" />

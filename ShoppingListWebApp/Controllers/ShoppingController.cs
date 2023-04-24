@@ -27,7 +27,12 @@ public class ShoppingController : Controller
                                          {
                                              Text = q.ToString(),
                                              Value = q.ToString()
-                                         })
+                                         }),
+                CategoryList = _db.Categories.Select(c => new SelectListItem
+                                                {
+                                                    Text = c.Description,
+                                                    Value = c.Id.ToString()
+                                                })
             },
             ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
             {
@@ -50,7 +55,9 @@ public class ShoppingController : Controller
             _db.ShopItems.Add(new ShopItem
             {
                 Name = newShopItemsViewModel.ShopItem.Name,
-                Quantity = newShopItemsViewModel.ShopItem.Quantity
+                Quantity = newShopItemsViewModel.ShopItem.Quantity,
+                UnitPrice = newShopItemsViewModel.ShopItem.UnitPrice,
+                CategoryId = newShopItemsViewModel.ShopItem.SelectedCategoryId
             });
             _db.SaveChanges();
 
@@ -68,7 +75,12 @@ public class ShoppingController : Controller
                                          {
                                              Text = q.ToString(),
                                              Value = q.ToString()
-                                         })
+                                         }),
+                CategoryList = _db.Categories.Select(c => new SelectListItem
+                                                {
+                                                    Text = c.Id.ToString(),
+                                                    Value = c.Description
+                                                })
             },
             ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
             {
@@ -97,7 +109,13 @@ public class ShoppingController : Controller
                                          {
                                              Text = q.ToString(),
                                              Value = q.ToString(),
-                                         })
+                                         }),
+                UnitPrice = shopItemToEdit.UnitPrice,
+                CategoryList = _db.Categories.Select(c => new SelectListItem
+                                        {
+                                            Text = c.Description,
+                                            Value = c.Id.ToString()
+                                        })
             },
             ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
             {
@@ -120,6 +138,9 @@ public class ShoppingController : Controller
 
             shopItemToEdit.Name = updatedShopItemsViewModel.ShopItem.Name;
             shopItemToEdit.Quantity = updatedShopItemsViewModel.ShopItem.Quantity;
+            shopItemToEdit.UnitPrice = updatedShopItemsViewModel.ShopItem.UnitPrice;
+            shopItemToEdit.CategoryId = updatedShopItemsViewModel.ShopItem.SelectedCategoryId;
+            
             _db.SaveChanges();
 
             return RedirectToAction(controllerName: "Shopping",
@@ -137,7 +158,13 @@ public class ShoppingController : Controller
                                          {
                                              Text = q.ToString(),
                                              Value = q.ToString()
-                                         })
+                                         }),
+                UnitPrice = updatedShopItemsViewModel.ShopItem.UnitPrice,
+                CategoryList = _db.Categories.Select(c => new SelectListItem
+                                            {
+                                                Text = c.Description,
+                                                Value = c.Id.ToString()
+                                            })
             },
             ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
             {
