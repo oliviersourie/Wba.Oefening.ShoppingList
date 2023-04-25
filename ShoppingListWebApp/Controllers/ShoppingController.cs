@@ -14,7 +14,7 @@ public class ShoppingController : Controller
     }
 
     [HttpGet]
-    public IActionResult Add()
+    public async Task<IActionResult> Add()
     {
         ShopItemsViewModel shopItemsViewModel = new ShopItemsViewModel
         {
@@ -27,28 +27,29 @@ public class ShoppingController : Controller
                                              Text = q.ToString(),
                                              Value = q.ToString()
                                          }),
-                CategoryList = _db.Categories.Select(c => new SelectListItem
+                CategoryList = await _db.Categories.Select(c => new SelectListItem
                                                 {
                                                     Text = c.Description,
                                                     Value = c.Id.ToString()
-                                                })
+                                                }).ToListAsync()
             },
-            ShopItems = _db.ShopItems
-                            .Select(si => new ShopItemViewModel
-                            {
-                                Id = si.Id,
-                                Name = si.Name,
-                                Quantity = si.Quantity,
-                                UnitPrice = si.UnitPrice,
-                                CategoryName = si.Category.Description
-                            }) 
+            ShopItems = await _db.ShopItems
+                                .Select(si => new ShopItemViewModel
+                                {
+                                    Id = si.Id,
+                                    Name = si.Name,
+                                    Quantity = si.Quantity,
+                                    UnitPrice = si.UnitPrice,
+                                    CategoryName = si.Category.Description
+                                })
+                                .ToListAsync()
         };
         return View(shopItemsViewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Add(ShopItemsViewModel newShopItemsViewModel)
+    public async Task<IActionResult> Add(ShopItemsViewModel newShopItemsViewModel)
     {
         /*Some custom error validation here...?*/
 
@@ -61,7 +62,7 @@ public class ShoppingController : Controller
                 UnitPrice = newShopItemsViewModel.ShopItem.UnitPrice,
                 CategoryId = newShopItemsViewModel.ShopItem.SelectedCategoryId
             });
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             return RedirectToAction(controllerName: "Shopping", 
                                     actionName:  nameof(Add));
@@ -78,31 +79,29 @@ public class ShoppingController : Controller
                                              Text = q.ToString(),
                                              Value = q.ToString()
                                          }),
-                CategoryList = _db.Categories.Select(c => new SelectListItem
+                CategoryList = await _db.Categories.Select(c => new SelectListItem
                                                 {
                                                     Text = c.Id.ToString(),
                                                     Value = c.Description
-                                                })
+                                                }).ToListAsync()
             },
-            ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
+            ShopItems = await _db.ShopItems.Select(si => new ShopItemViewModel
             {
                 Id = si.Id,
                 Name = si.Name,
                 Quantity = si.Quantity,
                 UnitPrice = si.UnitPrice,
-                CategoryName = _db.Categories
-                                    .SingleOrDefault(c => c.Id.Equals(si.CategoryId))
-                                    .Description
-            })
+                CategoryName = si.Category.Description
+            }).ToListAsync()
         };
         return View(shopItemsViewModel);
     }
 
     [HttpGet]
-    public IActionResult Edit(long id)
+    public async Task<IActionResult> Edit(long id)
     {
-        ShopItem shopItemToEdit = _db.ShopItems
-                                     .SingleOrDefault(si => si.Id.Equals(id));
+        ShopItem shopItemToEdit = await _db.ShopItems
+                                        .SingleOrDefaultAsync(si => si.Id.Equals(id));
 
         ShopItemsViewModel shopItemsViewModel = new ShopItemsViewModel
         {
@@ -117,41 +116,39 @@ public class ShoppingController : Controller
                                              Value = q.ToString(),
                                          }),
                 UnitPrice = shopItemToEdit.UnitPrice,
-                CategoryList = _db.Categories.Select(c => new SelectListItem
+                CategoryList = await _db.Categories.Select(c => new SelectListItem
                                         {
                                             Text = c.Description,
                                             Value = c.Id.ToString()
-                                        })
+                                        }).ToListAsync()   
             },
-            ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
+            ShopItems = await _db.ShopItems.Select(si => new ShopItemViewModel
             {
                 Id = si.Id,
                 Name = si.Name,
                 Quantity = si.Quantity,
                 UnitPrice = si.UnitPrice,
-                CategoryName = _db.Categories
-                                    .SingleOrDefault(c => c.Id.Equals(si.CategoryId))
-                                    .Description
-            })
+                CategoryName = si.Category.Description
+            }).ToListAsync()
         };
         return View(shopItemsViewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Edit([FromRoute] long id, ShopItemsViewModel updatedShopItemsViewModel)
+    public async Task<IActionResult> Edit([FromRoute] long id, ShopItemsViewModel updatedShopItemsViewModel)
     {
         if (ModelState.IsValid)
         {
-            ShopItem shopItemToEdit = _db.ShopItems
-                             .SingleOrDefault(si => si.Id.Equals(id));
+            ShopItem shopItemToEdit = await _db.ShopItems
+                                        .SingleOrDefaultAsync(si => si.Id.Equals(id));
 
             shopItemToEdit.Name = updatedShopItemsViewModel.ShopItem.Name;
             shopItemToEdit.Quantity = updatedShopItemsViewModel.ShopItem.Quantity;
             shopItemToEdit.UnitPrice = updatedShopItemsViewModel.ShopItem.UnitPrice;
             shopItemToEdit.CategoryId = updatedShopItemsViewModel.ShopItem.SelectedCategoryId;
             
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             return RedirectToAction(controllerName: "Shopping",
                                     actionName: nameof(Add));
@@ -170,30 +167,28 @@ public class ShoppingController : Controller
                                              Value = q.ToString()
                                          }),
                 UnitPrice = updatedShopItemsViewModel.ShopItem.UnitPrice,
-                CategoryList = _db.Categories.Select(c => new SelectListItem
+                CategoryList = await _db.Categories.Select(c => new SelectListItem
                                             {
                                                 Text = c.Description,
                                                 Value = c.Id.ToString()
-                                            })
+                                            }).ToListAsync()
             },
-            ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
+            ShopItems = await _db.ShopItems.Select(si => new ShopItemViewModel
             {
                 Id = si.Id,
                 Name = si.Name,
                 Quantity = si.Quantity,
                 UnitPrice = si.UnitPrice,
-                CategoryName = _db.Categories
-                                    .SingleOrDefault(c => c.Id.Equals(si.CategoryId))
-                                    .Description
-            })
+                CategoryName = si.Category.Description
+            }).ToListAsync()
         };
         return View(shopItemsViewModel);
     }
 
-    public IActionResult Delete(long id)
+    public async Task<IActionResult> Delete(long id)
     {
-        ShopItem deleteShopItem = _db.ShopItems
-                                     .SingleOrDefault(si => si.Id == id);
+        ShopItem deleteShopItem = await _db.ShopItems
+                                     .SingleOrDefaultAsync(si => si.Id == id);
         if(deleteShopItem is ShopItem)
         {
             _db.ShopItems.Remove(deleteShopItem);
@@ -201,7 +196,7 @@ public class ShoppingController : Controller
 
         try
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
         catch (DbUpdateException e)
         {
