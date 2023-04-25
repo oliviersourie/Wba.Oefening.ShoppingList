@@ -80,8 +80,8 @@ public class ShoppingController : Controller
                                          }),
                 CategoryList = _db.Categories.Select(c => new SelectListItem
                                                 {
-                                                    Text = c.Id.ToString(),
-                                                    Value = c.Description
+                                                    Text = c.Description,
+                                                    Value = c.Id.ToString()
                                                 })
             },
             ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
