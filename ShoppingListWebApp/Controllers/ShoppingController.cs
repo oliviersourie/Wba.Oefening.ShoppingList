@@ -40,9 +40,7 @@ public class ShoppingController : Controller
                                 Name = si.Name,
                                 Quantity = si.Quantity,
                                 UnitPrice = si.UnitPrice,
-                                CategoryName = _db.Categories
-                                                  .SingleOrDefault(c => c.Id.Equals(si.CategoryId))
-                                                  .Description
+                                CategoryName = si.Category.Description
                             }) 
         };
         return View(shopItemsViewModel);
