@@ -73,8 +73,8 @@ public class ShoppingController : Controller
                                          }),
                 CategoryList = await _db.Categories.Select(c => new SelectListItem
                                                 {
-                                                    Text = c.Id.ToString(),
-                                                    Value = c.Description
+                                                    Text = c.Description,
+                                                    Value = c.Id.ToString()
                                                 }).ToListAsync()
             },
             ShopItems = await _db.ShopItems.MapToViewModelAsync()
