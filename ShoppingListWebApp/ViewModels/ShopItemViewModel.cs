@@ -24,5 +24,7 @@ namespace ShoppingListWebApp.ViewModels
         [Range(1, int.MaxValue, ErrorMessage = "You must choose a {0}")]
         public int SelectedCategoryId { get; set; }
         public IEnumerable<SelectListItem> CategoryList { get; set; }
+
+        public string CategoryName { get; set; }
     }
 }

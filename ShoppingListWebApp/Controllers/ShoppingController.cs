@@ -1,5 +1,4 @@
-﻿using ClassLib.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoppingListWebApp.ViewModels;
 
@@ -34,12 +33,17 @@ public class ShoppingController : Controller
                                                     Value = c.Id.ToString()
                                                 })
             },
-            ShopItems = _db.ShopItems.Select(si => new ShopItemViewModel
-            {
-                Id = si.Id,
-                Name = si.Name,
-                Quantity = si.Quantity
-            })
+            ShopItems = _db.ShopItems
+                            .Select(si => new ShopItemViewModel
+                            {
+                                Id = si.Id,
+                                Name = si.Name,
+                                Quantity = si.Quantity,
+                                UnitPrice = si.UnitPrice,
+                                CategoryName = _db.Categories
+                                                  .SingleOrDefault(c => c.Id.Equals(si.CategoryId))
+                                                  .Description
+                            }) 
         };
         return View(shopItemsViewModel);
     }
@@ -86,7 +90,11 @@ public class ShoppingController : Controller
             {
                 Id = si.Id,
                 Name = si.Name,
-                Quantity = si.Quantity
+                Quantity = si.Quantity,
+                UnitPrice = si.UnitPrice,
+                CategoryName = _db.Categories
+                                    .SingleOrDefault(c => c.Id.Equals(si.CategoryId))
+                                    .Description
             })
         };
         return View(shopItemsViewModel);
@@ -121,7 +129,11 @@ public class ShoppingController : Controller
             {
                 Id = si.Id,
                 Name = si.Name,
-                Quantity = si.Quantity
+                Quantity = si.Quantity,
+                UnitPrice = si.UnitPrice,
+                CategoryName = _db.Categories
+                                    .SingleOrDefault(c => c.Id.Equals(si.CategoryId))
+                                    .Description
             })
         };
         return View(shopItemsViewModel);
@@ -170,7 +182,11 @@ public class ShoppingController : Controller
             {
                 Id = si.Id,
                 Name = si.Name,
-                Quantity = si.Quantity
+                Quantity = si.Quantity,
+                UnitPrice = si.UnitPrice,
+                CategoryName = _db.Categories
+                                    .SingleOrDefault(c => c.Id.Equals(si.CategoryId))
+                                    .Description
             })
         };
         return View(shopItemsViewModel);

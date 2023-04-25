@@ -1,8 +1,25 @@
 ﻿@model IEnumerable<ShopItemViewModel>
 
-<ul>
-    @foreach (ShopItemViewModel item in Model)
+@if(Model.Any())
+{
+    decimal totalPrice = 0;
+    IEnumerable<string> categories = Model.Select(c => c.CategoryName).Distinct();
+    
+    foreach (string category in categories)
     {
-        <li>@item.Name (@(item.Quantity)x) <a asp-action="Edit" asp-route-Id="@item.Id" class="material-icons">edit</a> <a asp-action="Delete" asp-route-Id="@item.Id" class="material-icons">delete</a></li>
+       <span class="category">@category</span>
+       <ul>
+            @foreach (ShopItemViewModel item in Model.Where(si => si.CategoryName.Equals(category)))
+            {
+                <li>@item.Name (@(item.Quantity)x) <a asp-action="Edit" asp-route-Id="@item.Id" class="material-icons">edit</a> <a asp-action="Delete" asp-route-Id="@item.Id" class="material-icons">delete</a></li>
+                totalPrice += item.UnitPrice * item.Quantity;
+            }
+       </ul>
     }
-</ul>
+    <p class="Total">Total: @totalPrice</p>
+}
+else
+{
+    <span>No items available</span>
+}
+
