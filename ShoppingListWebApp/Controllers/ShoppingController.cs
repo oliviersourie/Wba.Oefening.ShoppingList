@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using ShoppingListWebApp.Extensions;
 using ShoppingListWebApp.ViewModels;
 
 namespace ShoppingListWebApp.Controllers;
@@ -28,21 +29,12 @@ public class ShoppingController : Controller
                                              Value = q.ToString()
                                          }),
                 CategoryList = await _db.Categories.Select(c => new SelectListItem
-                                                {
-                                                    Text = c.Description,
-                                                    Value = c.Id.ToString()
-                                                }).ToListAsync()
+                {
+                    Text = c.Description,
+                    Value = c.Id.ToString()
+                }).ToListAsync()
             },
-            ShopItems = await _db.ShopItems
-                                .Select(si => new ShopItemViewModel
-                                {
-                                    Id = si.Id,
-                                    Name = si.Name,
-                                    Quantity = si.Quantity,
-                                    UnitPrice = si.UnitPrice,
-                                    CategoryName = si.Category.Description
-                                })
-                                .ToListAsync()
+            ShopItems = await _db.ShopItems.MapToViewModelAsync()
         };
         return View(shopItemsViewModel);
     }
@@ -85,14 +77,7 @@ public class ShoppingController : Controller
                                                     Value = c.Description
                                                 }).ToListAsync()
             },
-            ShopItems = await _db.ShopItems.Select(si => new ShopItemViewModel
-            {
-                Id = si.Id,
-                Name = si.Name,
-                Quantity = si.Quantity,
-                UnitPrice = si.UnitPrice,
-                CategoryName = si.Category.Description
-            }).ToListAsync()
+            ShopItems = await _db.ShopItems.MapToViewModelAsync()
         };
         return View(shopItemsViewModel);
     }
@@ -122,14 +107,7 @@ public class ShoppingController : Controller
                                             Value = c.Id.ToString()
                                         }).ToListAsync()   
             },
-            ShopItems = await _db.ShopItems.Select(si => new ShopItemViewModel
-            {
-                Id = si.Id,
-                Name = si.Name,
-                Quantity = si.Quantity,
-                UnitPrice = si.UnitPrice,
-                CategoryName = si.Category.Description
-            }).ToListAsync()
+            ShopItems = await _db.ShopItems.MapToViewModelAsync()
         };
         return View(shopItemsViewModel);
     }
@@ -173,14 +151,7 @@ public class ShoppingController : Controller
                                                 Value = c.Id.ToString()
                                             }).ToListAsync()
             },
-            ShopItems = await _db.ShopItems.Select(si => new ShopItemViewModel
-            {
-                Id = si.Id,
-                Name = si.Name,
-                Quantity = si.Quantity,
-                UnitPrice = si.UnitPrice,
-                CategoryName = si.Category.Description
-            }).ToListAsync()
+            ShopItems = await _db.ShopItems.MapToViewModelAsync()
         };
         return View(shopItemsViewModel);
     }
