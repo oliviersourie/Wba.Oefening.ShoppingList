@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoppingListWebApp.Extensions;
+using ShoppingListWebApp.Services;
 using ShoppingListWebApp.ViewModels;
 
 namespace ShoppingListWebApp.Controllers;
@@ -8,10 +9,12 @@ namespace ShoppingListWebApp.Controllers;
 public class ShoppingController : Controller
 {
     private readonly ShoppingListContext _db;
+    private readonly ISelectListBuilder _selectListBuilder;
 
-    public ShoppingController(ShoppingListContext shoppingListContext)
+    public ShoppingController(ShoppingListContext shoppingListContext, ISelectListBuilder selectListBuilder)
     {
         _db = shoppingListContext;
+        _selectListBuilder = selectListBuilder;
     }
 
     [HttpGet]
@@ -28,11 +31,7 @@ public class ShoppingController : Controller
                                              Text = q.ToString(),
                                              Value = q.ToString()
                                          }),
-                CategoryList = await _db.Categories.Select(c => new SelectListItem
-                {
-                    Text = c.Description,
-                    Value = c.Id.ToString()
-                }).ToListAsync()
+                CategoryList = await _selectListBuilder.GetCategoriesSelectListAsync()
             },
             ShopItems = await _db.ShopItems.MapToViewModelAsync()
         };
@@ -71,11 +70,7 @@ public class ShoppingController : Controller
                                              Text = q.ToString(),
                                              Value = q.ToString()
                                          }),
-                CategoryList = await _db.Categories.Select(c => new SelectListItem
-                                                {
-                                                    Text = c.Description,
-                                                    Value = c.Id.ToString()
-                                                }).ToListAsync()
+                CategoryList = await _selectListBuilder.GetCategoriesSelectListAsync()
             },
             ShopItems = await _db.ShopItems.MapToViewModelAsync()
         };
@@ -101,11 +96,7 @@ public class ShoppingController : Controller
                                              Value = q.ToString(),
                                          }),
                 UnitPrice = shopItemToEdit.UnitPrice,
-                CategoryList = await _db.Categories.Select(c => new SelectListItem
-                                        {
-                                            Text = c.Description,
-                                            Value = c.Id.ToString()
-                                        }).ToListAsync()   
+                CategoryList = await _selectListBuilder.GetCategoriesSelectListAsync()
             },
             ShopItems = await _db.ShopItems.MapToViewModelAsync()
         };
@@ -145,11 +136,7 @@ public class ShoppingController : Controller
                                              Value = q.ToString()
                                          }),
                 UnitPrice = updatedShopItemsViewModel.ShopItem.UnitPrice,
-                CategoryList = await _db.Categories.Select(c => new SelectListItem
-                                            {
-                                                Text = c.Description,
-                                                Value = c.Id.ToString()
-                                            }).ToListAsync()
+                CategoryList = await _selectListBuilder.GetCategoriesSelectListAsync()
             },
             ShopItems = await _db.ShopItems.MapToViewModelAsync()
         };
