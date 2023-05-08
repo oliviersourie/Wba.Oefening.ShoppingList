@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "_Master";
+}
+
+@model CartItemsViewModel
+
+@if (Model.CartItems.Any())
+{
+    decimal totalPrice = 0;
+
+    <ul>
+        @foreach (CartItemViewModel item in Model.CartItems)
+        {
+            <li>
+                @item.Name (@(item.Quantity)x)
+                <a asp-action="Delete" asp-route-Id="@item.Id" class="material-icons">delete</a>
+            </li>
+            totalPrice += item.UnitPrice * item.Quantity;
+        }
+    </ul>
+
+    <p class="Total">Total: @totalPrice</p>
+}
+else
+{
+    <span>No cart items available</span>
+}
+

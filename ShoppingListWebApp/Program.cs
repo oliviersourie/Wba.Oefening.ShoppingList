@@ -5,6 +5,7 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 builder.Services.AddDbContext<ShoppingListContext>(options =>
 {
     options.UseSqlServer(configuration.GetConnectionString("ShoppingDb"));
@@ -29,6 +30,11 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "ShoppingCart",
+    pattern: "cart",
+    defaults: new { controller = "Cart", action = "Index" });
+
+app.MapControllerRoute(
     name: "ShoppingList",
     pattern: "shopping",
     defaults: new {controller="Shopping", action="Add"});
@@ -37,4 +43,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.UseSession();
 app.Run();

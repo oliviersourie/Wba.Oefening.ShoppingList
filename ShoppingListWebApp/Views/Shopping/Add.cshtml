@@ -4,6 +4,13 @@
     Layout = "_Master";
 }
 
+<h5>
+    @if (TempData.ContainsKey("AddedShopItemToCart"))
+    {
+        <span style="color:coral">Shop item '@TempData["AddedShopItemToCart"]' added</span>
+    }
+</h5>
+
 <form asp-action="Add">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 

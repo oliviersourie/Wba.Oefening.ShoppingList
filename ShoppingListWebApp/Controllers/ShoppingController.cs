@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoppingListWebApp.Extensions;
 using ShoppingListWebApp.Services;
 using ShoppingListWebApp.ViewModels;
+using System.Text.Json;
 
 namespace ShoppingListWebApp.Controllers;
 
@@ -10,6 +11,7 @@ public class ShoppingController : Controller
 {
     private readonly ShoppingListContext _db;
     private readonly ISelectListBuilder _selectListBuilder;
+    private readonly string _cart = "ShoppingCart";
 
     public ShoppingController(ShoppingListContext shoppingListContext, ISelectListBuilder selectListBuilder)
     {
@@ -161,6 +163,28 @@ public class ShoppingController : Controller
             return StatusCode(StatusCodes.Status500InternalServerError, $"Something went wrong: {e.Message}");
         }
 
+        return RedirectToAction(nameof(ShoppingController.Add));
+    }
+
+    public async Task<IActionResult> AddToCart(long id)
+    {
+        ShopItem foundShopItem = await _db.ShopItems
+                                     .SingleOrDefaultAsync(si => si.Id == id);
+        if (foundShopItem is ShopItem)
+        {
+            ICollection<ShopItem> allCartItems = new List<ShopItem>();
+
+            if (HttpContext.Session.GetString(_cart) is string sessionCart)
+            {
+                allCartItems = JsonSerializer.Deserialize<ICollection<ShopItem>>(sessionCart);
+            }
+            allCartItems.Add(foundShopItem);
+
+            HttpContext.Session.SetString(_cart,
+                    JsonSerializer.Serialize(allCartItems));
+        }
+
+        TempData["AddedShopItemToCart"] = foundShopItem.Name;
         return RedirectToAction(nameof(ShoppingController.Add));
     }
 }
