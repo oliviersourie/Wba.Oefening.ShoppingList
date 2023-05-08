@@ -7,20 +7,19 @@ namespace ShoppingListWebApp.Controllers
     public class CartController : Controller
     {
         private readonly string _cart = "ShoppingCart";
+        private ICollection<ShopItem> _allCartItems;
+
+        public CartController()
+        {
+            _allCartItems = new List<ShopItem>();
+        }
 
         public ViewResult Index()
         {
-            ICollection<ShopItem> allCartItems = new List<ShopItem>();
-
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString(_cart)))
-            {
-                allCartItems = JsonSerializer.Deserialize<ICollection<ShopItem>>
-                                        (HttpContext.Session.GetString(_cart));
-            }
-
+            GetAllCartItems();
             CartItemsViewModel cartItemsVM= new CartItemsViewModel
             {
-                CartItems = allCartItems.Select(si => new CartItemViewModel
+                CartItems = _allCartItems.Select(si => new CartItemViewModel
                                                     {
                                                         Id = si.Id,
                                                         Name = si.Name,
@@ -31,10 +30,25 @@ namespace ShoppingListWebApp.Controllers
             return View(cartItemsVM);
         }
 
-
-        public IActionResult DeleteItem()
+        public IActionResult DeleteItem(long id)
         {
-            return View();
+            GetAllCartItems();
+            _allCartItems.Remove(_allCartItems.SingleOrDefault(ci => ci.Id.Equals(id)));
+
+            HttpContext.Session.SetString(_cart,
+                    JsonSerializer.Serialize(_allCartItems));
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        private void GetAllCartItems()
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString(_cart)))
+            {
+                _allCartItems = JsonSerializer.Deserialize<ICollection<ShopItem>>
+                                        (HttpContext.Session.GetString(_cart));
+            }
         }
 
     }

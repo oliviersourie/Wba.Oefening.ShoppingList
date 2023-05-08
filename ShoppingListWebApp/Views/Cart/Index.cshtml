@@ -13,7 +13,7 @@
         {
             <li>
                 @item.Name (@(item.Quantity)x)
-                <a asp-action="Delete" asp-route-Id="@item.Id" class="material-icons">delete</a>
+                <a asp-controller="Cart" asp-action="DeleteItem" asp-route-Id="@item.Id" class="material-icons">delete</a>
             </li>
             totalPrice += item.UnitPrice * item.Quantity;
         }
